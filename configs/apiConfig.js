@@ -9,9 +9,9 @@ const apiConfig = {
   jsonbin: {
     apiKey: "$2a$10$8GPzXyqP.i8t2DtqUdOqQu8NAIOgOrFaYJqcHM6us3RwVYBdz7lZu",
     masterKey: "$2a$10$2tLZckmM0bdqLlUhKUXWjOFgqy3AAng27v7W64M6n9tECBCB9GLhS",
-    groupBinId: "group_wudysoft",
-    usersBinId: "user_wudysoft",
-    messagesBinId: "pesan_wudysoft"
+    groupBinId: "6853e8448a456b7966b0fb5e",
+    usersBinId: "6853e8828960c979a5acbf6e",
+    messagesBinId: "6853e8a28960c979a5acbf80"
   }
 };
 export default apiConfig;
