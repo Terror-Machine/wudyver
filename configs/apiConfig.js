@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import CryptoJS from 'crypto-js';
 
 class ConfigManager {
     constructor() {
@@ -9,7 +9,7 @@ class ConfigManager {
         this.LIMIT_POINTS = this._parseIntOrDefault(process.env.LIMIT_POINTS);
         this.LIMIT_DURATION = this._parseIntOrDefault(process.env.LIMIT_DURATION);
         this.SONIVA_KEY = process.env.SONIVA_KEY;
-        this.JWT_SECRET = this.getJwtSecret(); 
+        this.JWT_SECRET = this._generateSecret();
         this._validateEssentialConfig();
     }
 
@@ -22,13 +22,14 @@ class ConfigManager {
         return parsed;
     }
 
-    getJwtSecret() {
+    _generateSecret() {
         if (!this.DOMAIN_URL || !this.PASSWORD) {
-            console.error("Configuration Error: Missing DOMAIN_URL or PASSWORD for JWT generation.");
+            console.error("Configuration Error: Missing DOMAIN_URL or PASSWORD for secret generation.");
             return null;
         }
-        const payload = { domain: this.DOMAIN_URL, iat: Math.floor(Date.now() / 1000) };
-        return jwt.sign(payload, this.PASSWORD, { algorithm: 'HS256' });
+        const dataToHash = this.DOMAIN_URL;
+        const secret = this.PASSWORD;
+        return CryptoJS.HmacSHA256(dataToHash, secret).toString();
     }
 
     _validateEssentialConfig() {
@@ -42,7 +43,7 @@ class ConfigManager {
             console.error("FATAL CONFIG ERROR: NEXT_PUBLIC_DOMAIN_URL is not defined.");
         }
         if (this.JWT_SECRET === null) {
-            console.error("FATAL CONFIG ERROR: Failed to generate a valid JWT secret.");
+            console.error("FATAL CONFIG ERROR: Failed to generate a valid application secret.");
         }
     }
 }
